@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusSeat Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden { display: none !important; }
+        /* Dodajemy pasek przewijania (scroll) dla lepszego efektu na prezentacji */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans h-screen flex flex-col">
+
+    <!-- EKRAN 1: Logowanie -->
+    <div id="loginScreen" class="flex-1 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-md w-96 text-center">
+            <h1 class="text-3xl font-bold text-blue-800 mb-2">CampusSeat</h1>
+            <p class="text-gray-500 mb-6">University Facility Booking System</p>
+            <input type="email" placeholder="University Email" class="w-full p-3 mb-4 border rounded bg-gray-50 focus:outline-blue-500">
+            <input type="password" placeholder="Password" class="w-full p-3 mb-6 border rounded bg-gray-50 focus:outline-blue-500">
+            <button onclick="showScreen('dashboardScreen')" class="w-full bg-blue-600 text-white p-3 rounded font-semibold hover:bg-blue-700 transition">Log In</button>
+        </div>
+    </div>
+
+    <!-- EKRAN 2: Panel Główny (Wyszukiwanie) -->
+    <div id="dashboardScreen" class="hidden flex-1 flex flex-col">
+        <!-- Pasek nawigacji -->
+        <nav class="bg-blue-800 text-white p-4 flex justify-between items-center shadow-md">
+            <div class="text-xl font-bold">CampusSeat</div>
+            <div>
+                <span class="mr-4">Welcome, Klaudia</span>
+                <button onclick="showScreen('loginScreen')" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-500 text-sm">Log out</button>
+            </div>
+        </nav>
+
+        <div class="flex flex-1 overflow-hidden">
+            <!-- Pasek boczny - Filtry -->
+            <aside class="w-64 bg-white p-6 shadow-md z-10 flex flex-col gap-4">
+                <h2 class="font-bold text-lg border-b pb-2">Filter Rooms</h2>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Date</label>
+                    <input type="date" id="searchDate" class="w-full border p-2 rounded" value="2026-07-15">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Capacity</label>
+                    <select class="w-full border p-2 rounded">
+                        <option>Any Capacity</option>
+                        <option>1-10 (Study Room)</option>
+                        <option>10-50 (Classroom)</option>
+                        <option>50+ (Auditorium)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">Equipment</label>
+                    <label class="flex items-center gap-2 mt-1"><input type="checkbox" checked> Projector</label>
+                    <label class="flex items-center gap-2 mt-1"><input type="checkbox"> Computers</label>
+                    <label class="flex items-center gap-2 mt-1"><input type="checkbox"> Whiteboard</label>
+                </div>
+                <button class="bg-blue-100 text-blue-700 p-2 rounded font-semibold mt-2 border border-blue-300 hover:bg-blue-200 transition">Search</button>
+            </aside>
+
+            <!-- Lista Sal -->
+            <main class="flex-1 p-8 bg-gray-100 overflow-y-auto">
+                <h2 class="text-2xl font-bold mb-6">Available Spaces for Selected Date</h2>
+                <div class="grid gap-4">
+                    
+                    <!-- Sala 1 -->
+                    <div class="bg-white p-5 rounded-lg shadow flex justify-between items-center border-l-4 border-green-500">
+                        <div>
+                            <h3 class="text-xl font-bold">Room 1 - Quiet Study</h3>
+                            <p class="text-gray-500 text-sm mt-1">Capacity: 4 | Equipment: Whiteboard, Desk</p>
+                            <p class="text-green-600 font-semibold text-sm mt-2">Available: 08:00 - 10:00</p>
+                        </div>
+                        <button onclick="openModal('Room 1 - Quiet Study', '08:00 to 10:00', false)" class="bg-green-600 text-white px-6 py-2 rounded font-semibold hover:bg-green-700 transition">Book Now</button>
+                    </div>
+
+                    <!-- Sala 2 -->
+                    <div class="bg-white p-5 rounded-lg shadow flex justify-between items-center border-l-4 border-green-500">
+                        <div>
+                            <h3 class="text-xl font-bold">Room 2 - Small Meeting Room</h3>
+                            <p class="text-gray-500 text-sm mt-1">Capacity: 10 | Equipment: Screen, Whiteboard</p>
+                            <p class="text-green-600 font-semibold text-sm mt-2">Available: 11:30 - 13:00</p>
+                        </div>
+                        <button onclick="openModal('Room 2 - Small Meeting Room', '11:30 to 13:00', false)" class="bg-green-600 text-white px-6 py-2 rounded font-semibold hover:bg-green-700 transition">Book Now</button>
+                    </div>
+
+                    <!-- Sala 3 -->
+                    <div class="bg-white p-5 rounded-lg shadow flex justify-between items-center border-l-4 border-green-500">
+                        <div>
+                            <h3 class="text-xl font-bold">Room 3 - Standard Classroom</h3>
+                            <p class="text-gray-500 text-sm mt-1">Capacity: 30 | Equipment: Projector, Whiteboard</p>
+                            <p class="text-green-600 font-semibold text-sm mt-2">Available: 14:00 - 15:30</p>
+                        </div>
+                        <button onclick="openModal('Room 3 - Standard Classroom', '14:00 to 15:30', false)" class="bg-green-600 text-white px-6 py-2 rounded font-semibold hover:bg-green-700 transition">Book Now</button>
+                    </div>
+
+                    <!-- Sala 4 -->
+                    <div class="bg-white p-5 rounded-lg shadow flex justify-between items-center border-l-4 border-green-500">
+                        <div>
+                            <h3 class="text-xl font-bold">Room 4 - Computer Lab</h3>
+                            <p class="text-gray-500 text-sm mt-1">Capacity: 25 | Equipment: Computers, Projector</p>
+                            <p class="text-green-600 font-semibold text-sm mt-2">Available: 10:00 - 12:00</p>
+                        </div>
+                        <button onclick="openModal('Room 4 - Computer Lab', '10:00 to 12:00', false)" class="bg-green-600 text-white px-6 py-2 rounded font-semibold hover:bg-green-700 transition">Book Now</button>
+                    </div>
+
+                    <!-- Sala 5 -->
+                    <div class="bg-white p-5 rounded-lg shadow flex justify-between items-center border-l-4 border-green-500">
+                        <div>
+                            <h3 class="text-xl font-bold">Room 5 - Seminar Room</h3>
+                            <p class="text-gray-500 text-sm mt-1">Capacity: 20 | Equipment: Smartboard, Projector</p>
+                            <p class="text-green-600 font-semibold text-sm mt-2">Available: 16:00 - 18:00</p>
+                        </div>
+                        <button onclick="openModal('Room 5 - Seminar Room', '16:00 to 18:00', false)" class="bg-green-600 text-white px-6 py-2 rounded font-semibold hover:bg-green-700 transition">Book Now</button>
+                    </div>
+
+                    <!-- Auditorium 1 -->
+                    <div class="bg-white p-5 rounded-lg shadow flex justify-between items-center border-l-4 border-yellow-500">
+                        <div>
+                            <h3 class="text-xl font-bold">Auditorium 1 - Main Hall</h3>
+                            <p class="text-gray-500 text-sm mt-1">Capacity: 250 | Equipment: Full AV System, Microphones</p>
+                            <p class="text-yellow-600 font-semibold text-sm mt-2">Requires Admin Approval</p>
+                        </div>
+                        <button onclick="openModal('Auditorium 1 - Main Hall', '09:00 to 12:00', true)" class="bg-yellow-500 text-white px-6 py-2 rounded font-semibold hover:bg-yellow-600 transition">Request Booking</button>
+                    </div>
+
+                    <!-- Auditorium 2 -->
+                    <div class="bg-white p-5 rounded-lg shadow flex justify-between items-center border-l-4 border-yellow-500">
+                        <div>
+                            <h3 class="text-xl font-bold">Auditorium 2 - Science Wing</h3>
+                            <p class="text-gray-500 text-sm mt-1">Capacity: 120 | Equipment: Projector, Microphones</p>
+                            <p class="text-yellow-600 font-semibold text-sm mt-2">Requires Admin Approval</p>
+                        </div>
+                        <button onclick="openModal('Auditorium 2 - Science Wing', '13:00 to 15:00', true)" class="bg-yellow-500 text-white px-6 py-2 rounded font-semibold hover:bg-yellow-600 transition">Request Booking</button>
+                    </div>
+
+                    <!-- Auditorium 3 -->
+                    <div class="bg-white p-5 rounded-lg shadow flex justify-between items-center border-l-4 border-yellow-500">
+                        <div>
+                            <h3 class="text-xl font-bold">Auditorium 3 - Arts Wing</h3>
+                            <p class="text-gray-500 text-sm mt-1">Capacity: 150 | Equipment: Projector, Stage, Microphones</p>
+                            <p class="text-yellow-600 font-semibold text-sm mt-2">Requires Admin Approval</p>
+                        </div>
+                        <button onclick="openModal('Auditorium 3 - Arts Wing', '16:00 to 19:00', true)" class="bg-yellow-500 text-white px-6 py-2 rounded font-semibold hover:bg-yellow-600 transition">Request Booking</button>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- EKRAN 3: Okienko potwierdzenia (Modal) -->
+    <div id="bookingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white w-96 rounded-lg shadow-xl p-6">
+            <h2 id="modalTitle" class="text-xl font-bold text-gray-800 mb-2">Confirm Reservation</h2>
+            
+            <p class="text-gray-600 text-sm mb-4">You are about to book <strong id="modalRoomName">Room</strong> on <strong id="modalDate">date</strong> from <strong id="modalTime">time</strong>.</p>
+            
+            <!-- Komunikat widoczny tylko dla Auditorium -->
+            <div id="adminWarning" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-4 text-sm text-yellow-700">
+                <strong>Notice:</strong> This facility is restricted. Your request will be sent to the Administrator for approval.
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 py-2 rounded font-semibold hover:bg-gray-300 transition">Cancel</button>
+                <button id="modalConfirmBtn" onclick="submitBooking()" class="flex-1 bg-green-600 text-white py-2 rounded font-semibold hover:bg-green-700 transition">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skrypty -->
+    <script>
+        function showScreen(screenId) {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function openModal(roomName, time, requiresAdmin) {
+            const selectedDate = document.getElementById('searchDate').value;
+
+            document.getElementById('modalRoomName').innerText = roomName;
+            document.getElementById('modalTime').innerText = time;
+            document.getElementById('modalDate').innerText = selectedDate;
+
+            const titleElement = document.getElementById('modalTitle');
+            const warningElement = document.getElementById('adminWarning');
+            const btnElement = document.getElementById('modalConfirmBtn');
+
+            if (requiresAdmin) {
+                titleElement.innerText = "Request Booking Approval";
+                warningElement.classList.remove('hidden');
+                btnElement.innerText = "Send Request";
+                btnElement.className = "flex-1 bg-yellow-500 text-white py-2 rounded font-semibold hover:bg-yellow-600 transition";
+            } else {
+                titleElement.innerText = "Confirm Reservation";
+                warningElement.classList.add('hidden');
+                btnElement.innerText = "Confirm";
+                btnElement.className = "flex-1 bg-green-600 text-white py-2 rounded font-semibold hover:bg-green-700 transition";
+            }
+
+            document.getElementById('bookingModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+        }
+
+        function submitBooking() {
+            closeModal();
+            alert('Action completed successfully!');
+        }
+    </script>
+</body>
+</html>
