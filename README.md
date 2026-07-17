@@ -24,3 +24,4 @@ Since this is a frontend-only prototype, no local server or backend installation
 **Note:** An active internet connection is required when opening the file, as the project loads the Tailwind CSS framework dynamically via a CDN link.
 
 ## Video Link
+https://youtu.be/tiyLtZY57ps
